@@ -91,7 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 if (state.data.image != null)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     child: ElevatedButton(
                       child: const Text('Confirm'),
                       onPressed: () {
