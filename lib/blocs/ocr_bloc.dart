@@ -56,67 +56,10 @@ class OCRBloc extends Bloc<OCREvent, OCRState> {
 
     List<TextLine> filteredProducts = [];
 
-    List<TextLine> possibleTop = [];
-
-    List<TextLine> possibleBottom = [];
-
-    ///Grouping detected texts
-    ///TODO: Separate logic
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        if (OCRResultFilterUtils.isInList(
-            line.text, state.data.billType.textTop)) {
-          possibleTop.add(line);
-          continue;
-        } else if (OCRResultFilterUtils.isInList(
-            line.text, state.data.billType.textBottom)) {
-          possibleBottom.add(line);
-          continue;
-        }
-        if (int.tryParse(line.text
-              ..replaceAll('.', '')
-              ..replaceAll(',', '')
-              ..replaceAll('d', '')) ==
-            null) {
-          detectedProducts.add(line);
-        }
+        detectedProducts.add(line);
       }
-    }
-
-    print(possibleBottom.map((e) => e.text));
-    print(possibleTop.map((e) => e.text));
-
-    double? maxTop = OCRResultFilterUtils.getMaxCoordinate(possibleTop);
-    double? maxBottom = OCRResultFilterUtils.getMinCoordinate(possibleBottom);
-    double? rightBoundary = OCRResultFilterUtils.findAndGetRightCoordinate(
-        s3fnbBillTop[1], possibleTop);
-
-    print(maxTop);
-    print(maxBottom);
-
-    ///Filter text within specific coordinations
-    ///TODO: Separate logic and refactor
-    if (maxTop == null && maxBottom == null) {
-      filteredProducts.addAll(detectedProducts);
-    } else if (maxTop != null && maxBottom == null) {
-      filteredProducts.addAll(detectedProducts.where((element) =>
-          element.boundingBox.top > maxTop &&
-          (rightBoundary != null
-              ? element.boundingBox.right < rightBoundary
-              : true)));
-    } else if (maxTop == null && maxBottom != null) {
-      filteredProducts.addAll(detectedProducts.where((element) =>
-          element.boundingBox.bottom < maxBottom &&
-          (rightBoundary != null
-              ? element.boundingBox.right < rightBoundary
-              : true)));
-    } else if (maxTop != null && maxBottom != null) {
-      filteredProducts.addAll(detectedProducts.where((element) =>
-          element.boundingBox.top > maxTop &&
-          element.boundingBox.bottom < maxBottom &&
-          (rightBoundary != null
-              ? element.boundingBox.right < rightBoundary
-              : true)));
     }
 
     emit(_OCRLoadedState(

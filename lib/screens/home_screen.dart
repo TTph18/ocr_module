@@ -21,13 +21,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   ImagePicker? _imagePicker;
-  String bearToken = '';
 
   @override
   void initState() {
     super.initState();
     _imagePicker = ImagePicker();
-    _getPassedArguments();
   }
 
   @override
@@ -35,12 +33,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _getPassedArguments() async {
+  void _passOCRResult(List<String> texts) async {
     final intent = await const MethodChannel('flutter_activity')
-        .invokeMethod('getArguments');
-
-    print(bearToken);
-    bearToken = '${intent}';
+        .invokeMethod('callBackResults', {'ocrResults': texts});
   }
 
   @override
@@ -52,7 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
             style: const TextStyle(color: Colors.white),
           ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white,),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
             onPressed: () {
               SystemNavigator.pop();
             },
@@ -62,34 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                Text(bearToken),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: BillType.values
-                          .map((e) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: IgnorePointer(
-                                  ignoring: state.data.billType == e,
-                                  child: ElevatedButton(
-                                    style: state.data.billType == e
-                                        ? TextButton.styleFrom(
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white)
-                                        : null,
-                                    onPressed: () {
-                                      context
-                                          .read<OCRBloc>()
-                                          .add(ChangeBillTypeEvent(type: e));
-                                    },
-                                    child: Text(e.name),
-                                  ),
-                                ),
-                              ))
-                          .toList()),
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Row(
@@ -109,6 +79,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: () => _getImage(ImageSource.camera),
                         ),
                       ),
+                      if (state.data.image != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ElevatedButton(
+                            child: const Text('Confirm'),
+                            onPressed: () {
+                              _passOCRResult((state.data.ocrTextLines
+                                      .map((e) => e.text)
+                                      .where((element) => element.isNotEmpty))
+                                  .toList());
+                            },
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -142,12 +125,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(state.data.ocrTextLines
-                            .map((e) =>
-                                OCRResultFilterUtils.filterParenthesesText(
-                                    e.text))
-                            .where((element) => element.isNotEmpty)
-                            .join(', ') ??
-                        ''),
+                        .map((e) => e.text)
+                        .where((element) => element.isNotEmpty)
+                        .join(', ')),
                   ),
               ],
             ),
