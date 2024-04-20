@@ -1,0 +1,20 @@
+{
+  "name": "ocr-module",
+  "version": "0.0.0",
+  "description": "none",
+  "main": "src/index",
+  "author": " <> ()",
+  "license": "UNLICENSED",
+  "homepage": "#readme",
+  "keywords": [
+    "react-native"
+  ],
+  "devDependencies": {
+    "react": "18.1.0",
+    "react-native": "0.70.4"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.1",
+    "react-native": ">=0.70.0 <1.0.x"
+  }
+}

@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.ocrmodule">
+    <application>
+        <activity
+            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="landscape"
+            />
+        <activity
+            android:name="com.ocrmodule.CustomFlutterActivity" />
+        <activity
+            android:name="com.ocrmodule.OcrModule" />
+    </application>
+</manifest>
