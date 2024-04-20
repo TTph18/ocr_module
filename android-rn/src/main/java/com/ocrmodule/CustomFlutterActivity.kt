@@ -11,11 +11,15 @@ class CustomFlutterActivity : FlutterActivity() {
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "callBackResults" -> {
-                        val data = call.arguments as HashMap<*,*>
-                        val ocrResults = data["ocrResults"] as? List<String> ?: emptyList<String>()
+                        val data = call.arguments as HashMap<*, *>
+                        val ocrResults = data["ocrResults"] as? ArrayList<*> ?: ArrayList<Any>()
+
+                        // Convert ArrayList<Any> to List<String>
+                        val ocrTexts = ocrResults.mapNotNull { it as? String }
 
                         // Invoke the callback with the list of strings
-                        OcrModule.invokeCallback(ocrResults)
+                        OcrModule.invokeCallback(ocrTexts)
+
                         result.success("")
                     }
 
