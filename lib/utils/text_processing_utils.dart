@@ -1,11 +1,50 @@
+import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 import 'character_utils.dart';
 
+extension TextLineJsonMethod on TextLine {
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'elements': elements.map((element) => element.toJson()).toList(),
+      'rect': boundingBox.toJson(),
+      'points': cornerPoints.map((point) => [point.x, point.y]).toList(),
+      'angle': angle,
+    };
+  }
+}
+
+extension TextElementJsonMethod on TextElement {
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'rect': boundingBox.toJson(),
+      'recognizedLanguages': recognizedLanguages,
+      'points': cornerPoints.map((point) => [point.x, point.y]).toList(),
+      'confidence': confidence,
+      'angle': angle,
+    };
+  }
+}
+
+extension RectJsonMethod on Rect {
+  Map<String, dynamic> toJson() {
+    return {
+      'top': top,
+      'left': left,
+      'right': right,
+      'bottom': bottom,
+      'width': width,
+      'height': height,
+    };
+  }
+}
+
 enum BillType {
-  S3FNB('s3fnb',s3fnbBillTop, s3fnbBillBottom),
-  GRAB('Grab',grabFoodTop, grabFoodBottom),
-  SHOPEE('ShopeeFood',shopeeFoodTop, shopeeFoodBottom);
+  S3FNB('s3fnb', s3fnbBillTop, s3fnbBillBottom),
+  GRAB('Grab', grabFoodTop, grabFoodBottom),
+  SHOPEE('ShopeeFood', shopeeFoodTop, shopeeFoodBottom);
 
   const BillType(this.name, this.textTop, this.textBottom);
 
@@ -95,7 +134,7 @@ abstract class OCRResultFilterUtils {
     if (textLines.isEmpty) return null;
 
     List<double> topCoordinates =
-    textLines.map((textLine) => textLine.boundingBox.top).toList();
+        textLines.map((textLine) => textLine.boundingBox.top).toList();
 
     double maximumTop;
     double minimumTop;
@@ -125,7 +164,8 @@ abstract class OCRResultFilterUtils {
   ///Method look for the input target in a list and return its right coordination
   ///Return right coordination if found
   ///Return null if none satisfy
-  static double? findAndGetRightCoordinate(String target, List<TextLine> textLines) {
+  static double? findAndGetRightCoordinate(
+      String target, List<TextLine> textLines) {
     List<TextLine> compareList = textLines.map((textLine) => textLine).toList();
 
     while (compareList.length > 1) {

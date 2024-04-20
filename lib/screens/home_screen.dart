@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:ocr_module/blocs/ocr_bloc.dart';
 import 'package:ocr_module/utils/text_processing_utils.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _passOCRResult(List<String> texts) async {
-    final intent = await const MethodChannel('flutter_activity')
-        .invokeMethod('callBackResults', jsonEncode({'ocrResults': texts}));
+  void _passOCRResult(List<TextLine> texts) async {
+    final intent = await const MethodChannel('flutter_activity').invokeMethod(
+        'callBackResults',
+        jsonEncode({'ocrResults': texts.map((e) => e.toJson()).toList()}));
 
     if (intent != null && intent == true) {
       SystemNavigator.pop();
@@ -84,22 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: () => _getImage(ImageSource.camera),
                         ),
                       ),
-                      if (state.data.image != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ElevatedButton(
-                            child: const Text('Confirm'),
-                            onPressed: () {
-                              _passOCRResult((state.data.ocrTextLines
-                                      .map((e) => e.text)
-                                      .where((element) => element.isNotEmpty))
-                                  .toList());
-                            },
-                          ),
-                        ),
                     ],
                   ),
                 ),
+                if (state.data.image != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ElevatedButton(
+                      child: const Text('Confirm'),
+                      onPressed: () {
+                        _passOCRResult(state.data.ocrTextLines);
+                      },
+                    ),
+                  ),
                 Center(
                   child: state.maybeMap(
                       orElse: () => state.data.image != null
