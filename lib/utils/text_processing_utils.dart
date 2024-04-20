@@ -9,6 +9,7 @@ extension TextLineJsonMethod on TextLine {
       'text': text,
       'elements': elements.map((element) => element.toJson()).toList(),
       'rect': boundingBox.toJson(),
+      'recognizedLanguages' : recognizedLanguages,
       'points': cornerPoints.map((point) => [point.x, point.y]).toList(),
       'angle': angle,
     };
