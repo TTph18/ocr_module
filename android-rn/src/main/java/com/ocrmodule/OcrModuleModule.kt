@@ -34,7 +34,7 @@ class OcrModule(reactContext: ReactApplicationContext) :
     }
 
     // Method to invoke the callback
-    fun invokeCallback(result: List<String>) {
+    fun invokeCallback(result: String) {
       callback?.invoke(result)
     }
   }

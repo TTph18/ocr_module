@@ -3,6 +3,8 @@ package com.ocrmodule
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import org.json.JSONArray
+import org.json.JSONException
 
 class CustomFlutterActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -11,14 +13,10 @@ class CustomFlutterActivity : FlutterActivity() {
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "callBackResults" -> {
-                        val data = call.arguments as HashMap<*, *>
-                        val ocrResults = data["ocrResults"] as? ArrayList<*> ?: ArrayList<Any>()
-
-                        // Convert ArrayList<Any> to List<String>
-                        val ocrTexts = ocrResults.mapNotNull { it as? String }
+                        val data = call.arguments as String
 
                         // Invoke the callback with the list of strings
-                        OcrModule.invokeCallback(ocrTexts)
+                        OcrModule.invokeCallback(data)
 
                         result.success(true)
                     }
