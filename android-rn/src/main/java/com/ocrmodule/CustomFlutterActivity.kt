@@ -20,7 +20,7 @@ class CustomFlutterActivity : FlutterActivity() {
                         // Invoke the callback with the list of strings
                         OcrModule.invokeCallback(ocrTexts)
 
-                        result.success("")
+                        result.success(true)
                     }
 
                     else -> result.notImplemented()

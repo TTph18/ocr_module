@@ -58,7 +58,7 @@ class OCRBloc extends Bloc<OCREvent, OCRState> {
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        detectedProducts.add(line);
+        filteredProducts.add(line);
       }
     }
 
