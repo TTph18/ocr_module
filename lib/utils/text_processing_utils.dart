@@ -10,8 +10,6 @@ extension TextLineJsonMethod on TextLine {
       'elements': elements.map((element) => element.toJson()).toList(),
       'rect': boundingBox.toJson(),
       'recognizedLanguages': recognizedLanguages,
-      'points': cornerPoints.map((point) => [point.x, point.y]).toList(),
-      'angle': angle,
     };
   }
 }
@@ -22,9 +20,6 @@ extension TextElementJsonMethod on TextElement {
       'text': text,
       'rect': boundingBox.toJson(),
       'recognizedLanguages': recognizedLanguages,
-      'points': cornerPoints.map((point) => [point.x, point.y]).toList(),
-      'confidence': confidence,
-      'angle': angle,
     };
   }
 }
@@ -36,8 +31,8 @@ extension RectJsonMethod on Rect {
       'left': left,
       'right': right,
       'bottom': bottom,
-      'width': width,
-      'height': height,
+      // 'width': width,
+      // 'height': height,
     };
   }
 }
