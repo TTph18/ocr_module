@@ -36,6 +36,7 @@ dependencies:
   equatable: ^2.0.5
   json_annotation: ^4.8.1
   flutter_exif_rotation: ^0.5.1
+  image_picker_android: ^0.8.10
 
 dev_dependencies:
   flutter_test:

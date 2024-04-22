@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _passOCRResult(List<TextLine> texts) async {
     final intent = await const MethodChannel('flutter_activity').invokeMethod(
         'callBackResults',
-        jsonEncode({'ocrResults': texts.map((e) => e.text).toList()}));
+        jsonEncode({'ocrResults': texts.map((e) => e.toJson()).toList()}));
 
     if (intent != null && intent == true) {
       SystemNavigator.pop();
@@ -144,11 +144,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final pickedFile = await _imagePicker?.pickImage(source: source);
 
     if (pickedFile != null) {
-      final fixedImage =
-          await FlutterExifRotation.rotateAndSaveImage(path: pickedFile.path);
 
       if (mounted) {
-        context.read<OCRBloc>().add(ProcessImageEvent(path: fixedImage.path));
+        context.read<OCRBloc>().add(ProcessImageEvent(path: pickedFile.path));
       }
     }
   }

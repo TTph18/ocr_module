@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:ocr_module/utils/image_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -44,29 +45,30 @@ class OCRBloc extends Bloc<OCREvent, OCRState> {
     emit(_OCRLoadingState(
         data: state.data.copyWith(ocrTextResult: '', ocrTextLines: [])));
 
-    final inputImage = InputImage.fromFilePath(event.path);
+    final fixedImage =
+    await FlutterExifRotation.rotateAndSaveImage(path: event.path);
+
+    final inputImage = InputImage.fromFilePath(fixedImage.path);
     final recognizedText = await textRecognizer.processImage(inputImage);
 
     Size imageSize =
-        await ImageUtils.getImageSize(Image.file(File(event.path)));
+        await ImageUtils.getImageSize(Image.file(File(fixedImage.path)));
 
     String recognizedString = '';
 
     List<TextLine> detectedProducts = [];
 
-    List<TextLine> filteredProducts = [];
-
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        filteredProducts.add(line);
+        detectedProducts.add(line);
       }
     }
 
     emit(_OCRLoadedState(
         data: state.data.copyWith(
-            image: File(event.path),
+            image: File(fixedImage.path),
             imageSize: imageSize,
-            ocrTextLines: filteredProducts,
+            ocrTextLines: detectedProducts,
             ocrTextResult: recognizedString)));
   }
 }

@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 void main() {
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -14,8 +16,14 @@ void main() {
       statusBarColor: Colors.transparent,
     ),
   );
- SystemChrome.setPreferredOrientations(
-     [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
+  final ImagePickerPlatform imagePickerImplementation =
+      ImagePickerPlatform.instance;
+  if (imagePickerImplementation is ImagePickerAndroid) {
+    imagePickerImplementation.useAndroidPhotoPicker = true;
+  }
   runApp(const MyApp());
 }
 

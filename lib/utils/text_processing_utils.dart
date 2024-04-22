@@ -7,9 +7,7 @@ extension TextLineJsonMethod on TextLine {
   Map<String, dynamic> toJson() {
     return {
       'text': text,
-      'elements': elements.map((element) => element.toJson()).toList(),
       'rect': boundingBox.toJson(),
-      'recognizedLanguages': recognizedLanguages,
     };
   }
 }
@@ -31,8 +29,6 @@ extension RectJsonMethod on Rect {
       'left': left,
       'right': right,
       'bottom': bottom,
-      // 'width': width,
-      // 'height': height,
     };
   }
 }
