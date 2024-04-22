@@ -7,7 +7,7 @@ extension TextLineJsonMethod on TextLine {
   Map<String, dynamic> toJson() {
     return {
       'text': text,
-      'rect': boundingBox.toJson(),
+      'boundingBox': boundingBox.toJson(),
     };
   }
 }
@@ -16,7 +16,7 @@ extension TextElementJsonMethod on TextElement {
   Map<String, dynamic> toJson() {
     return {
       'text': text,
-      'rect': boundingBox.toJson(),
+      'boundingBox': boundingBox.toJson(),
       'recognizedLanguages': recognizedLanguages,
     };
   }
