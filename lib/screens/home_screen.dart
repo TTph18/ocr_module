@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _passOCRResult(List<TextLine> texts) async {
     final intent = await const MethodChannel('flutter_activity').invokeMethod(
         'callBackResults',
-        jsonEncode({'ocrResults': texts.map((e) => e.toJson()).toList()}));
+        jsonEncode({'ocrResults': texts.map((e) => e.text).toList()}));
 
     if (intent != null && intent == true) {
       SystemNavigator.pop();
