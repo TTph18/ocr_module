@@ -6,6 +6,7 @@ import 'character_utils.dart';
 extension TextLineJsonMethod on TextLine {
   Map<String, dynamic> toJson() {
     return {
+      'id' : DateTime.now().microsecondsSinceEpoch,
       'text': text,
       'boundingBox': boundingBox.toJson(),
     };
